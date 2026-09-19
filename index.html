@@ -157,6 +157,68 @@
 
   .snap.hidden{ display:none; }
 
+  .snap button{
+    all: unset;
+    display: block;
+    cursor: zoom-in;
+    width: 100%;
+  }
+
+  .snap button:focus-visible img{
+    outline: 2px solid var(--stamp-red);
+    outline-offset: 2px;
+  }
+
+  /* Lightbox */
+  .lightbox{
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 17, 12, 0.92);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+
+  .lightbox.open{ display: flex; }
+
+  .lightbox img{
+    max-width: 100%;
+    max-height: 85vh;
+    object-fit: contain;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    filter: sepia(0.1) contrast(1.03);
+  }
+
+  .lightbox-close{
+    all: unset;
+    position: fixed;
+    top: 18px;
+    right: 24px;
+    font-family: 'Special Elite', cursive;
+    color: var(--paper);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 8px 14px;
+    border: 1px solid var(--paper);
+    opacity: 0.85;
+  }
+
+  .lightbox-close:hover{ opacity: 1; }
+
+  .lightbox-caption{
+    position: fixed;
+    bottom: 24px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: var(--paper);
+    font-size: 0.8rem;
+    opacity: 0.7;
+    letter-spacing: 0.03em;
+  }
+
   /* Specs form */
   .specs{
     width: 100%;
@@ -294,17 +356,17 @@
     <p class="section-label">Surveillance Photos</p>
     <div class="gallery" id="gallery">
       <!-- Renamed photos should be Images/cat-01.jpg through Images/cat-11.jpg -->
-      <div class="snap"><img src="Images/cat-01.jpg" alt="Slash, photo 1" onerror="this.closest('.snap').classList.add('hidden')"></div>
-      <div class="snap"><img src="Images/cat-02.jpg" alt="Slash, photo 2" onerror="this.closest('.snap').classList.add('hidden')"></div>
-      <div class="snap"><img src="Images/cat-03.jpg" alt="Slash, photo 3" onerror="this.closest('.snap').classList.add('hidden')"></div>
-      <div class="snap"><img src="Images/cat-04.jpg" alt="Slash, photo 4" onerror="this.closest('.snap').classList.add('hidden')"></div>
-      <div class="snap"><img src="Images/cat-05.jpg" alt="Slash, photo 5" onerror="this.closest('.snap').classList.add('hidden')"></div>
-      <div class="snap"><img src="Images/cat-06.jpg" alt="Slash, photo 6" onerror="this.closest('.snap').classList.add('hidden')"></div>
-      <div class="snap"><img src="Images/cat-07.jpg" alt="Slash, photo 7" onerror="this.closest('.snap').classList.add('hidden')"></div>
-      <div class="snap"><img src="Images/cat-08.jpg" alt="Slash, photo 8" onerror="this.closest('.snap').classList.add('hidden')"></div>
-      <div class="snap"><img src="Images/cat-09.jpg" alt="Slash, photo 9" onerror="this.closest('.snap').classList.add('hidden')"></div>
-      <div class="snap"><img src="Images/cat-10.jpg" alt="Slash, photo 10" onerror="this.closest('.snap').classList.add('hidden')"></div>
-      <div class="snap"><img src="Images/cat-11.jpg" alt="Slash, photo 11" onerror="this.closest('.snap').classList.add('hidden')"></div>
+      <div class="snap"><button type="button" onclick="openLightbox('Images/cat-01.jpg', 'Slash, photo 1')"><img src="Images/cat-01.jpg" alt="Slash, photo 1" onerror="this.closest('.snap').classList.add('hidden')"></button></div>
+      <div class="snap"><button type="button" onclick="openLightbox('Images/cat-02.jpg', 'Slash, photo 2')"><img src="Images/cat-02.jpg" alt="Slash, photo 2" onerror="this.closest('.snap').classList.add('hidden')"></button></div>
+      <div class="snap"><button type="button" onclick="openLightbox('Images/cat-03.jpg', 'Slash, photo 3')"><img src="Images/cat-03.jpg" alt="Slash, photo 3" onerror="this.closest('.snap').classList.add('hidden')"></button></div>
+      <div class="snap"><button type="button" onclick="openLightbox('Images/cat-04.jpg', 'Slash, photo 4')"><img src="Images/cat-04.jpg" alt="Slash, photo 4" onerror="this.closest('.snap').classList.add('hidden')"></button></div>
+      <div class="snap"><button type="button" onclick="openLightbox('Images/cat-05.jpg', 'Slash, photo 5')"><img src="Images/cat-05.jpg" alt="Slash, photo 5" onerror="this.closest('.snap').classList.add('hidden')"></button></div>
+      <div class="snap"><button type="button" onclick="openLightbox('Images/cat-06.jpg', 'Slash, photo 6')"><img src="Images/cat-06.jpg" alt="Slash, photo 6" onerror="this.closest('.snap').classList.add('hidden')"></button></div>
+      <div class="snap"><button type="button" onclick="openLightbox('Images/cat-07.jpg', 'Slash, photo 7')"><img src="Images/cat-07.jpg" alt="Slash, photo 7" onerror="this.closest('.snap').classList.add('hidden')"></button></div>
+      <div class="snap"><button type="button" onclick="openLightbox('Images/cat-08.jpg', 'Slash, photo 8')"><img src="Images/cat-08.jpg" alt="Slash, photo 8" onerror="this.closest('.snap').classList.add('hidden')"></button></div>
+      <div class="snap"><button type="button" onclick="openLightbox('Images/cat-09.jpg', 'Slash, photo 9')"><img src="Images/cat-09.jpg" alt="Slash, photo 9" onerror="this.closest('.snap').classList.add('hidden')"></button></div>
+      <div class="snap"><button type="button" onclick="openLightbox('Images/cat-10.jpg', 'Slash, photo 10')"><img src="Images/cat-10.jpg" alt="Slash, photo 10" onerror="this.closest('.snap').classList.add('hidden')"></button></div>
+      <div class="snap"><button type="button" onclick="openLightbox('Images/cat-11.jpg', 'Slash, photo 11')"><img src="Images/cat-11.jpg" alt="Slash, photo 11" onerror="this.closest('.snap').classList.add('hidden')"></button></div>
     </div>
   </section>
 
@@ -348,6 +410,38 @@
   </footer>
 
 </div>
+
+<div class="lightbox" id="lightbox">
+  <button type="button" class="lightbox-close" onclick="closeLightbox()">Close ✕</button>
+  <img id="lightbox-img" src="" alt="">
+  <div class="lightbox-caption" id="lightbox-caption"></div>
+</div>
+
+<script>
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxCaption = document.getElementById('lightbox-caption');
+
+  function openLightbox(src, caption){
+    lightboxImg.src = src;
+    lightboxImg.alt = caption;
+    lightboxCaption.textContent = caption;
+    lightbox.classList.add('open');
+  }
+
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    lightboxImg.src = '';
+  }
+
+  lightbox.addEventListener('click', function(e){
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeLightbox();
+  });
+</script>
 
 </body>
 </html>
