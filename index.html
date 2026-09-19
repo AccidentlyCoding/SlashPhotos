@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CASE FILE 07-CAT — SLASH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #ddd2ab;
+    --paper-dark: #cfc196;
+    --ink: #2b2620;
+    --ink-faded: #4a433a;
+    --redact: #1c1a16;
+    --stamp-red: #9c2b1f;
+    --tape: #e8e0c4;
+    --line: #a89972;
+  }
+
+  * { box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background: var(--paper-dark);
+    background-image:
+      radial-gradient(ellipse at 20% 10%, rgba(0,0,0,0.05), transparent 60%),
+      radial-gradient(ellipse at 80% 90%, rgba(0,0,0,0.06), transparent 55%);
+    color: var(--ink);
+    font-family: 'Courier Prime', monospace;
+    line-height: 1.6;
+    padding: 32px 16px 80px;
+  }
+
+  .folder{
+    max-width: 760px;
+    margin: 0 auto;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    box-shadow: 0 2px 0 var(--line), 0 12px 30px rgba(0,0,0,0.25);
+    position: relative;
+    padding: 0;
+  }
+
+  .folder::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0; height:4px;
+    background: repeating-linear-gradient(90deg, var(--ink) 0 2px, transparent 2px 6px);
+    opacity: 0.15;
+  }
+
+  header{
+    padding: 28px 32px 20px;
+    border-bottom: 2px solid var(--ink);
+    position: relative;
+  }
+
+  .case-row{
+    display:flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    color: var(--ink-faded);
+    margin-bottom: 18px;
+  }
+
+  h1{
+    font-family: 'Special Elite', cursive;
+    font-size: clamp(2.4rem, 8vw, 3.4rem);
+    margin: 0 0 4px;
+    letter-spacing: 0.02em;
+  }
+
+  .designation{
+    font-size: 1rem;
+    color: var(--ink-faded);
+    font-style: italic;
+  }
+
+  .stamp{
+    position: absolute;
+    top: 22px;
+    right: 28px;
+    border: 4px solid var(--stamp-red);
+    color: var(--stamp-red);
+    font-family: 'Special Elite', cursive;
+    font-size: 1.05rem;
+    padding: 6px 14px;
+    transform: rotate(-9deg);
+    opacity: 0.85;
+    border-radius: 4px;
+    mix-blend-mode: multiply;
+  }
+
+  section{
+    padding: 28px 32px;
+    border-bottom: 1px dashed var(--line);
+  }
+
+  section:last-of-type{ border-bottom: none; }
+
+  .section-label{
+    font-family: 'Special Elite', cursive;
+    font-size: 0.9rem;
+    color: var(--ink-faded);
+    margin: 0 0 16px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--ink);
+    display: inline-block;
+  }
+
+  /* Photo gallery — taped snapshots */
+  .gallery{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    justify-content: center;
+    padding-top: 6px;
+  }
+
+  .snap{
+    background: #fff;
+    padding: 10px 10px 26px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+    width: 150px;
+    position: relative;
+  }
+
+  .snap img{
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    display: block;
+    filter: sepia(0.15) contrast(1.03);
+  }
+
+  .snap::before{
+    content:"";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-3deg);
+    width: 46px;
+    height: 18px;
+    background: var(--tape);
+    opacity: 0.8;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  }
+
+  .snap:nth-child(3n)::before{ transform: translateX(-50%) rotate(4deg); }
+  .snap:nth-child(3n+1){ transform: rotate(-2deg); }
+  .snap:nth-child(3n+2){ transform: rotate(1.5deg); }
+  .snap:nth-child(3n){ transform: rotate(-1deg); }
+
+  .snap.hidden{ display:none; }
+
+  /* Specs form */
+  .specs{
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .specs tr{ border-bottom: 1px dotted var(--line); }
+  .specs tr:last-child{ border-bottom: none; }
+
+  .specs td{
+    padding: 9px 4px;
+    vertical-align: top;
+  }
+
+  .specs td.field{
+    width: 38%;
+    color: var(--ink-faded);
+    text-transform: lowercase;
+    letter-spacing: 0.03em;
+  }
+
+  .specs td.field::after{ content: ":"; }
+
+  .specs td.value{ font-weight: 700; }
+
+  /* Field report */
+  .report p{
+    margin: 0 0 14px;
+  }
+
+  .report ul{
+    margin: 0;
+    padding-left: 22px;
+  }
+
+  .report li{
+    margin-bottom: 10px;
+  }
+
+  .redacted{
+    background: var(--redact);
+    color: var(--redact);
+    padding: 0 6px;
+    border-radius: 1px;
+    user-select: none;
+  }
+
+  /* Price block */
+  .price-block{
+    text-align: center;
+    padding: 32px;
+  }
+
+  .price-label{
+    font-size: 0.85rem;
+    color: var(--ink-faded);
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+
+  .price{
+    font-family: 'Special Elite', cursive;
+    font-size: clamp(2.1rem, 7vw, 2.9rem);
+    color: var(--stamp-red);
+    line-height: 1.1;
+  }
+
+  .price-note{
+    font-size: 0.82rem;
+    color: var(--ink-faded);
+    margin-top: 8px;
+    font-style: italic;
+  }
+
+  /* Contact */
+  .contact{
+    text-align: center;
+    padding-bottom: 40px;
+  }
+
+  .contact p{ margin: 0 0 18px; color: var(--ink-faded); }
+
+  .contact-btn{
+    display: inline-block;
+    font-family: 'Special Elite', cursive;
+    font-size: 1rem;
+    color: var(--paper);
+    background: var(--ink);
+    padding: 12px 28px;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    border: 1px solid var(--ink);
+  }
+
+  .contact-btn:hover{ opacity: 0.85; }
+
+  footer{
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--ink-faded);
+    padding: 18px 32px 30px;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 480px){
+    header, section{ padding-left: 20px; padding-right: 20px; }
+    .stamp{ position: static; display: inline-block; margin-top: 14px; transform: rotate(-4deg); }
+    .case-row{ flex-direction: column; gap: 4px; }
+  }
+
+  @media (prefers-reduced-motion: no-preference){
+    .folder{ animation: settle 0.5s ease-out; }
+  }
+  @keyframes settle{
+    from{ opacity: 0; transform: translateY(8px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="folder">
+
+  <header>
+    <div class="case-row">
+      <span>CASE FILE NO. 07-CAT</span>
+      <span>STATUS: ACTIVE FIELD ASSET</span>
+    </div>
+    <h1>SLASH</h1>
+    <div class="designation">Xenobiological Threat Detection Unit — Feline Division</div>
+    <div class="stamp">TOP SECRET</div>
+  </header>
+
+  <section>
+    <p class="section-label">Surveillance Photos</p>
+    <div class="gallery" id="gallery">
+      <!-- Renamed photos should be images/cat-01.jpg through images/cat-11.jpg -->
+      <div class="snap"><img src="images/cat-01.jpg" alt="Slash, photo 1" onerror="this.closest('.snap').classList.add('hidden')"></div>
+      <div class="snap"><img src="images/cat-02.jpg" alt="Slash, photo 2" onerror="this.closest('.snap').classList.add('hidden')"></div>
+      <div class="snap"><img src="images/cat-03.jpg" alt="Slash, photo 3" onerror="this.closest('.snap').classList.add('hidden')"></div>
+      <div class="snap"><img src="images/cat-04.jpg" alt="Slash, photo 4" onerror="this.closest('.snap').classList.add('hidden')"></div>
+      <div class="snap"><img src="images/cat-05.jpg" alt="Slash, photo 5" onerror="this.closest('.snap').classList.add('hidden')"></div>
+      <div class="snap"><img src="images/cat-06.jpg" alt="Slash, photo 6" onerror="this.closest('.snap').classList.add('hidden')"></div>
+      <div class="snap"><img src="images/cat-07.jpg" alt="Slash, photo 7" onerror="this.closest('.snap').classList.add('hidden')"></div>
+      <div class="snap"><img src="images/cat-08.jpg" alt="Slash, photo 8" onerror="this.closest('.snap').classList.add('hidden')"></div>
+      <div class="snap"><img src="images/cat-09.jpg" alt="Slash, photo 9" onerror="this.closest('.snap').classList.add('hidden')"></div>
+      <div class="snap"><img src="images/cat-10.jpg" alt="Slash, photo 10" onerror="this.closest('.snap').classList.add('hidden')"></div>
+      <div class="snap"><img src="images/cat-11.jpg" alt="Slash, photo 11" onerror="this.closest('.snap').classList.add('hidden')"></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="section-label">Subject Specifications</p>
+    <table class="specs">
+      <tr><td class="field">Designation</td><td class="value">Slash</td></tr>
+      <tr><td class="field">Classification</td><td class="value">Domestic Shorthair, Field-Trained</td></tr>
+      <tr><td class="field">Specialty</td><td class="value">Extraterrestrial Detection &amp; Deterrence</td></tr>
+      <tr><td class="field">Years in Service</td><td class="value">Ongoing, unclear — subject will not confirm age</td></tr>
+      <tr><td class="field">Clearance Level</td><td class="value">Full run of the house</td></tr>
+      <tr><td class="field">Known Weaknesses</td><td class="value">Sunbeams, unattended lunch</td></tr>
+    </table>
+  </section>
+
+  <section class="report">
+    <p class="section-label">Field Report — Notable Incidents</p>
+    <ul>
+      <li>Subject can detect an unfamiliar sound at <span class="redacted">up to forty feet</span> and will investigate without being asked twice.</li>
+      <li>Demonstrates heightened vigilance at exactly 3 AM, a pattern consistent with known alien activity windows.</li>
+      <li>Maintains a forward operating position on the windowsill for hours at a time, tracking movement no other household member can perceive.</li>
+      <li>Has never once brought back evidence of what she's tracking. Analysts consider this either elite tradecraft or a complete lack of interest in follow-through.</li>
+      <li>Reacts to laser pointers with a speed and intensity that suggests prior training against hostile light-based technology.</li>
+      <li>Unconfirmed reports place subject at the scene of every strange noise in the house, always looking extremely calm about it.</li>
+    </ul>
+  </section>
+
+  <section class="price-block">
+    <div class="price-label">ACQUISITION VALUE</div>
+    <div class="price">$1,000,000,000,000</div>
+    <div class="price-note">One (1) trillion U.S. dollars. Non-negotiable. Financing not available.</div>
+  </section>
+
+  <section class="contact">
+    <p>Inquiries reviewed by appointment only.</p>
+    <a class="contact-btn" href="#">Request Contact</a>
+  </section>
+
+  <footer>
+    This file is a dry-run exercise and not a genuine offer for sale. Slash is not actually for sale, at any price, to anyone, ever.
+  </footer>
+
+</div>
+
+</body>
+</html>
